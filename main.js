@@ -1,8 +1,8 @@
 import { HashMap } from "./hashmap.js";
 
-const test = new HashMap();
+const test = new HashMap(0.75, 2);
 
 test.set("apple", "red");
-test.set("apple", "green");
+test.set("pear", "yellow");
 
-console.log(test.buckets[13]);
+console.table(test.buckets);
