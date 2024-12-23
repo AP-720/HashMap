@@ -84,6 +84,7 @@ export class HashMap {
 		this.buckets = resizedBuckets;
 	}
 
+	// get(key) takes one argument as a key and returns the value that is assigned to this key. If a key is not found, return null.
 	get(key) {
 		const index = this.hash(key) % this.capacity;
 
@@ -111,4 +112,33 @@ export class HashMap {
 		// Key not found, return null
 		return null;
 	}
+
+	// has(key) takes a key as an argument and returns true or false based on whether or not the key is in the hash map.
+	has(key) {
+		const index = this.hash(key) % this.capacity;
+
+		if (index < 0 || index >= this.buckets.length) {
+			throw new Error("Trying to access index out of bounds");
+		}
+
+		if (!this.buckets[index]) {
+			return false;
+		}
+
+		const bucket = this.buckets[index];
+		let current = bucket.head;
+
+		while (current) {
+			if (current.value.key === key) {
+				return true;
+			}
+			current = current.nextNode;
+		}
+
+		return false;
+	}
+
+	// remove(key) takes a key as an argument. If the given key is in the hash map, it should remove the entry with that key and return true. If the key isn’t in the hash map, it should return false.
+
+	remove(key) {}
 }
