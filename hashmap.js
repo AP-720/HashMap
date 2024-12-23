@@ -55,6 +55,7 @@ export class HashMap {
 		const resizedBuckets = new Array(this.capacity);
 
 		for (const bucket of this.buckets) {
+			// If bucket is empty move on to next one.
 			if (!bucket) {
 				continue;
 			}
@@ -81,5 +82,33 @@ export class HashMap {
 			}
 		}
 		this.buckets = resizedBuckets;
+	}
+
+	get(key) {
+		const index = this.hash(key) % this.capacity;
+
+		// Ensure the index is within bounds
+		if (index < 0 || index >= this.buckets.length) {
+			throw new Error("Trying to access index out of bounds");
+		}
+
+		// If the bucket at the index is empty, return null
+		if (!this.buckets[index]) {
+			return null;
+		}
+
+		const bucket = this.buckets[index];
+		let current = bucket.head;
+
+		// Traverse the linked list in the bucket to find the key
+		while (current) {
+			if (current.value.key === key) {
+				return current.value.value;
+			}
+			current = current.nextNode;
+		}
+
+		// Key not found, return null
+		return null;
 	}
 }
