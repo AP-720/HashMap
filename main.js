@@ -6,7 +6,7 @@ test.set("apple", "red");
 test.set("key69", "green");
 test.set("pear", "yellow");
 
-// console.log(test.has('null'));
-
+console.log(test.remove("pear"));
+console.log(test.remove("pear"));
 
 console.table(test.buckets);

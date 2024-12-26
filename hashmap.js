@@ -140,5 +140,34 @@ export class HashMap {
 
 	// remove(key) takes a key as an argument. If the given key is in the hash map, it should remove the entry with that key and return true. If the key isn’t in the hash map, it should return false.
 
-	remove(key) {}
+	// Todo - The remove method in HashMap can be implemented using the find and removeAt methods from LinkedList.
+	remove(key) {
+		const index = this.hash(key) % this.capacity;
+
+		if (index < 0 || index >= this.capacity) {
+			throw new Error("Index out of bounds");
+		}
+
+		const bucket = this.buckets[index];
+
+		// If bucket is empty, key isn't present
+		if (!bucket) {
+			return false;
+		}
+
+		let current = bucket.head;
+		let position = 0;
+
+		while (current) {
+			if (current.value.key === key) {
+				bucket.removeAt(position);
+				this.size--;
+				return true;
+			}
+			current = current.next;
+			position++;
+		}
+
+		return false;
+	}
 }
