@@ -33,8 +33,8 @@ export class HashMap {
 		let current = bucket.head;
 		// traverses linked list checking if key exists if it does over writes current value
 		while (current) {
-			if (current.key === key) {
-				current.value = value;
+			if (current.value.key === key) {
+				current.value.value = value;
 				return;
 			}
 			current = current.nextNode;
@@ -140,21 +140,23 @@ export class HashMap {
 
 	// remove(key) takes a key as an argument. If the given key is in the hash map, it should remove the entry with that key and return true. If the key isn’t in the hash map, it should return false.
 
-	// Todo - The remove method in HashMap can be implemented using the find and removeAt methods from LinkedList.
 	remove(key) {
 		const index = this.hash(key) % this.capacity;
 
+		// Ensure the index is within the valid range of the buckets array
 		if (index < 0 || index >= this.capacity) {
 			throw new Error("Index out of bounds");
 		}
 
+		// Retrieve the bucket (linked list) at the calculated index
 		const bucket = this.buckets[index];
 
-		// If bucket is empty, key isn't present
+		// If the bucket is empty (no linked list exists), the key is not present
 		if (!bucket) {
 			return false;
 		}
 
+		// Start traversing the linked list in the bucket
 		let current = bucket.head;
 		let position = 0;
 
@@ -167,7 +169,87 @@ export class HashMap {
 			current = current.next;
 			position++;
 		}
-
+		// If the traversal completes without finding the key, it is not present
 		return false;
+	}
+
+	// Returns the number of stored keys in the hash map.
+	length() {
+		return this.size;
+	}
+
+	// Removes all entries in the hash map.
+	clear() {
+		this.buckets = new Array(this.capacity);
+		this.size = 0;
+		console.log("HashMap Cleared.");
+	}
+
+	// Returns an array containing all the keys inside the hash map.
+	keys() {
+		const keysArray = new Array();
+
+		for (const bucket of this.buckets) {
+			if (!bucket) {
+				continue;
+			}
+			let current = bucket.head;
+
+			while (current) {
+				keysArray.push(current.value.key);
+				current = current.nextNode;
+			}
+		}
+		return keysArray;
+	}
+
+	// returns an array containing all the values.
+	values() {
+		const valuesArray = new Array();
+
+		for (const bucket of this.buckets) {
+			if (!bucket) {
+				continue;
+			}
+			let current = bucket.head;
+
+			while (current) {
+				valuesArray.push(current.value.value);
+				current = current.nextNode;
+			}
+		}
+		return valuesArray;
+	}
+
+	//  returns an array that contains each key, value pair. Example: [[firstKey, firstValue], [secondKey, secondValue]]
+
+	entries() {
+		// Initialize an empty array to store the key-value pairs
+		const entriesArray = new Array();
+
+		// Iterate over each bucket in the hash map
+		for (const bucket of this.buckets) {
+			// If the bucket is empty (no entries), skip to the next bucket
+			if (!bucket) {
+				continue;
+			}
+
+			// Start from the head of the linked list in the current bucket
+			let current = bucket.head;
+
+			// Traverse through the linked list
+			while (current) {
+				// Create an array containing the key and value of the current node
+				let keyValue = [current.value.key, current.value.value];
+
+				// Push the key-value pair array into the entriesArray
+				entriesArray.push(keyValue);
+
+				// Move to the next node in the linked list
+				current = current.nextNode;
+			}
+		}
+		// Return the array of key-value pairs
+		return entriesArray;
 	}
 }
